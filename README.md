@@ -1,56 +1,55 @@
 # MarketPulse Workspace
 
-Public portfolio workspace for a Frontend / Product Engineer application.
+상품 가격, 재고, 이벤트 신호를 한 화면에서 확인하고 운영 우선순위를 정할 수 있도록 만든 커머스 운영 대시보드 프로젝트입니다.
 
-## Repository topology
+## 저장소 구성
 
-- Organization workspace: `https://github.com/marketpulse-labs/marketpulse-workspace`
-- Personal mirror: `https://github.com/cyjoon68/marketpulse-workspace`
-- App submodule: `https://github.com/marketpulse-labs/marketpulse-fe`
-- API submodule: `https://github.com/marketpulse-labs/marketpulse-be`
-- Default branch: `develop`
-- `main` branch is retained.
+- FE: [`marketpulse-fe`](https://github.com/marketpulse-labs/marketpulse-fe)
+- BE: [`marketpulse-be`](https://github.com/marketpulse-labs/marketpulse-be)
+- 개인 공개 미러: https://github.com/cyjoon68/marketpulse-workspace
+- 기본 브랜치: `develop`
 
-## Implementation scope
+## 핵심 기능
 
-- FE: React, TypeScript, `ky`, TanStack Query, D3, jQuery/Ajax compatibility, Playwright smoke test.
-- BE: Python Flask RESTful API, module, PostgreSQL, Tortoise ORM, pytest, OpenAPI, k6.
-- demo-backend conversion: auth/user/phone/token ideas converted to REST. GraphQL is not used.
+- 가격 변동 알림과 재고 위험 신호 확인
+- 상품 이벤트 기반 운영 우선순위 표시
+- D3 기반 가격/재고 추세 시각화
+- REST API 기반 dashboard/event 상태 조회
+- PostgreSQL 기반 상품 snapshot 데이터 관리
 
-## Local commands
-
-```bash
-git submodule update --init --recursive
-cd marketpulse-fe && npm install && npm run build
-cd ../marketpulse-be && python -m venv .venv && . .venv/bin/activate && pip install -r requirements.txt && pytest
-```
-
-## Screenshot
+## 화면
 
 ![MarketPulse dashboard](docs/screenshots/dashboard.png)
 
-## API example
+## 기술 스택
 
-```http
-GET /api/dashboard
-PATCH /api/events/{event_id}/status
-POST /api/auth/refresh
+- Frontend: React, TypeScript, ky, TanStack Query, D3, jQuery
+- Backend: Python, Flask, Tortoise ORM
+- Database: PostgreSQL
+- Infra/Test: Docker Compose, OpenAPI, pytest, k6, Playwright
+
+## 실행
+
+```bash
+git submodule update --init --recursive
+
+cd marketpulse-fe
+npm install
+npm run dev
+
+cd ../marketpulse-be
+python3 -m venv .venv
+. .venv/bin/activate
+pip install -r requirements.txt
+pytest
 ```
 
-## ERD
+## 데이터 흐름
 
-```mermaid
-erDiagram
-  users ||--o{ refresh_tokens : owns
-  products ||--o{ price_snapshots : records
-  products ||--o{ inventory_snapshots : records
-  products ||--o{ product_events : emits
+```text
+Product Dashboard
+  -> ky client
+  -> Flask REST API
+  -> Tortoise ORM
+  -> PostgreSQL
 ```
-
-## Verification
-
-- `npm install && npm run build`: passed
-- `npm audit --audit-level=critical`: passed, 0 vulnerabilities
-- `npm run test:e2e`: passed, 1 Playwright smoke test
-- `pip install -r requirements.txt && pytest`: passed, 2 tests
-- Screenshot captured with Playwright
