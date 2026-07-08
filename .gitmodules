@@ -1,0 +1,8 @@
+[submodule "marketpulse-fe"]
+	path = marketpulse-fe
+	url = https://github.com/marketpulse-labs/marketpulse-fe.git
+	branch = develop
+[submodule "marketpulse-be"]
+	path = marketpulse-be
+	url = https://github.com/marketpulse-labs/marketpulse-be.git
+	branch = develop
